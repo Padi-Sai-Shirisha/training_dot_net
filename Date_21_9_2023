@@ -318,7 +318,7 @@ End
 Exec SelectCustomerstabledata 25
 
 ====================================================================================================================================================================================
-Question:
+Question: Number have to be decremented by 1 and printed 
 
 CREATE or alter PROCEDURE printnum 
 (@n AS Int)
@@ -630,6 +630,7 @@ ENABLE TRIGGER trg_products_dup ON products;
 DISABLE TRIGGER ALL ON products;
 ENABLE TRIGGER ALL ON products;
 
+USE testdb;
 
 DISABLE TRIGGER ALL ON testdb;
 ENABLE TRIGGER ALL ON testdb;
