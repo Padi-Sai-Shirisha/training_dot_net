@@ -1,55 +1,252 @@
 Concurrency - presentation - Arkapravo Ganguly
 
-CREATE FUNCTION chkPRime (@number INT) RETURNS VARCHAR(max)
+Class:
+====================================================================================================================================================================================
 
-AS BEGIN
-
-DECLARE
-
-@x INT = @number; DECLARE @counter INT = 2;
-
-DECLARE @is_prime INT = 1; DECLARE @type VARCHAR(max) ;
-
-IF @xx2 = 0
-
+CREATE FUNCTION udfNetSale(
+    @quantity INT,
+    @list_price DEC(10,2),
+    @discount DEC(4,2)
+)
+RETURNS DEC(10,2)
+AS 
 BEGIN
+    RETURN @quantity * @list_price * (1 - @discount);
+END;
 
-SET @type = 'even';
+SELECT dbo.udfNetSale(10,100,0.1) as net_sale;  --900
 
-!= 8
+SELECT testdb.dbo.udfNetSale(10,list_price,0.1) as net_sale from bikestores.production.products;
 
-END
+====================================================================================================================================================================================
 
-IF @xx2
-
+CREATE FUNCTION fn(
+    @number INT
+)
+RETURNS INT
+AS 
 BEGIN
+	DECLARE @x INT = @number;
+	DECLARE @sm INT = 0;
+	WHILE @x > 0
+	BEGIN
+	       set @sm = @x + @sm;
+	       set @x = @x - 1;
+	END
+    RETURN @sm;
+END;
 
-SET @type = 'odd';
+Select dbo.fn(5);
 
-END ELSE
+====================================================================================================================================================================================
 
-WHILE (@counter <= @number/2) BEGIN
-
-IF((@number@counter) = 0) BEGIN
-
-SET @type = 'not prime'; SET @is_prime = 0;
-
-BREAK
-
-END
-
-END
-
-IF @is_prime = 1
-
+Alter FUNCTION fn(
+    @number INT
+)
+RETURNS INT
+AS 
 BEGIN
+	DECLARE @x INT = @number;
+	DECLARE @sm INT = 1;
+	WHILE @x > 0
+	BEGIN
+	       set @sm = @x * @sm;
+	       set @x = @x - 1;
+	END
+    RETURN @sm;
+END;
 
-SET @type = 'prime';
+Select dbo.fn(5);
 
+====================================================================================================================================================================================
+create or Alter FUNCTION fn2(
+    @number INT
+)
+RETURNS INT
+AS 
+BEGIN
+	DECLARE @x INT = @number;
+	DECLARE @sm INT = 1;
+	WHILE @x > 0
+	BEGIN
+	       set @sm = @x * @sm;
+	       set @x = @x - 1;
+	END
+    RETURN @sm;
+END;
+
+Select dbo.fn2(5);
+
+====================================================================================================================================================================================
+
+DROP FUNCTION dbo.fn2;
+
+====================================================================================================================================================================================
+Question: Create function for chkPRime(list_price) which returns even, odd, oddPrime
+
+Solution:
+
+CREATE OR ALTER FUNCTION chkPrime (@number INT)
+RETURNS VARCHAR(MAX)
+AS
+BEGIN
+    DECLARE @x INT = @number;
+    DECLARE @counter INT = 2;
+    DECLARE @is_prime INT = 1;
+	DECLARE @is_even INT = 0;
+    DECLARE @type VARCHAR(MAX);
+
+    IF @x % 2 = 0
+	BEGIN
+        SET @type = 'even';
+		SET @is_even = 1;
+	END
+    ELSE
+    BEGIN
+        WHILE (@counter <= @number / 2)
+        BEGIN
+            IF ((@number % @counter) = 0)
+            BEGIN
+                SET @type = 'odd';
+                SET @is_prime = 0;
+                BREAK;
+            END
+            SET @counter = @counter + 1;
+        END
+    END
+
+    IF @is_prime = 1 AND @is_even = 0
+        SET @type = 'oddPrime';
+
+    RETURN @type;
 END
 
-END
-
-END
-
+SELECT dbo.chkPRime(9) as type_check;
 SELECT dbo.chkPRime(list_price) as type_check from bikestores.production.products;
+
+====================================================================================================================================================================================
+
+BEGIN
+DECLARE @product_table TABLE (
+    product_name VARCHAR(MAX) NOT NULL,
+    brand_id INT NOT NULL,
+    list_price DEC(11,2) NOT NULL
+);
+INSERT INTO @product_table
+     SELECT product_name, brand_id, list_price
+         FROM BikeStores.production.products WHERE category_id = 1;
+
+SELECT  * FROM @product_table;
+END
+
+
+====================================================================================================================================================================================
+
+BEGIN
+DECLARE @product_table TABLE (
+    product_name VARCHAR(MAX) NOT NULL,
+    brand_id INT NOT NULL,
+    list_price DEC(11,2) NOT NULL
+);
+INSERT INTO @product_table
+     SELECT product_name, brand_id, list_price
+         FROM BikeStores.production.products WHERE category_id = 1;
+
+SELECT  p.product_name, p.brand_id, p.list_price FROM @product_table p join BikeStores.production.products
+on p.list_price=BikeStores.production.products.list_price;
+END
+
+====================================================================================================================================================================================
+
+CREATE OR ALTER FUNCTION udfSplit(
+    @string VARCHAR(MAX))
+RETURNS @parts TABLE (    
+idx INT IDENTITY PRIMARY KEY,
+val VARCHAR(MAX)   
+)  AS
+BEGIN
+   INSERT INTO @parts  VALUES (@string);
+   RETURN
+END
+
+select * from dbo.udfSplit('str1');
+
+====================================================================================================================================================================================
+
+CREATE OR ALTER FUNCTION udfSplit(
+    @string VARCHAR(MAX), 
+    @delimiter VARCHAR(50) = ' ')
+RETURNS @parts TABLE
+(    
+idx INT IDENTITY PRIMARY KEY,
+val VARCHAR(MAX)   
+)	AS
+BEGIN
+DECLARE @index INT = -1;
+WHILE (LEN(@string) > 0) 
+BEGIN 
+    SET @index = CHARINDEX(@delimiter , @string)  ;
+    IF (@index = 0) AND (LEN(@string) > 0)  
+    BEGIN  
+        INSERT INTO @parts  VALUES (@string);
+        BREAK  
+    END 
+    IF (@index > 1)  
+    BEGIN  
+        INSERT INTO @parts VALUES (LEFT(@string, @index - 1));
+		SET @string = RIGHT(@string, (LEN(@string) - @index));  
+    END 
+    ELSE
+		SET @string = RIGHT(@string, (LEN(@string) - @index)); 
+    END
+RETURN
+END
+
+select * from dbo.udfSplit('The function ufnSplit() returns a table variable', ' ');
+
+select * from dbo.udfSplit('The function ufnSplit() returns a table variable', default);
+
+select * from dbo.udfSplit('The,function,ufnSplit(),returns,a,table,variable', ',');
+
+====================================================================================================================================================================================
+Question: Define a table variable function which has same number of rows as customers with columns as:
+Customer_id : same as table
+Zip_code : same as table
+Eligible4Gift: calculated as (yes/no) according to whether the zip_code is prime or not. (use the scalar function chkPrime() and case..when..then or if..else to insert the value into the table variable).
+The function returns the table to be displayed later.
+
+Solution:
+
+use testdb;
+
+drop table if exists customers;
+select* into customers from BikeStores.sales.customers;
+select* from customers;
+
+
+CREATE FUNCTION GiftEligibility()
+RETURNS @gift_table TABLE (
+    customer_id INT,
+    zip_code INT,
+    Eligible4gift VARCHAR(MAX)
+)
+AS
+BEGIN
+    INSERT INTO @gift_table (customer_id, zip_code, Eligible4gift)
+    SELECT customer_id, zip_code,
+           CASE WHEN dbo.chkPrime(zip_code) = 'oddPrime' THEN 'yes' ELSE 'no' END AS Eligibility
+    FROM customers;
+
+    RETURN;
+END;
+
+SELECT * FROM dbo.GiftEligibility();
+
+====================================================================================================================================================================================
+
+
+
+
+
+
+
