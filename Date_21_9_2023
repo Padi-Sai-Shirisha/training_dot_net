@@ -244,9 +244,227 @@ SELECT * FROM dbo.GiftEligibility();
 
 ====================================================================================================================================================================================
 
+CREATE FUNCTION udfProductInYear (
+    @model_year INT
+)
+RETURNS TABLE
+AS
+RETURN
+    SELECT 
+        product_name,
+        model_year,
+        list_price
+    FROM
+         BikeStores.production.products
+    WHERE
+        model_year = @model_year;
+
+select * from dbo.udfProductInYear(2016);
+
+====================================================================================================================================================================================
+
+drop table orders;
+drop table customers;
+
+CREATE TABLE CUSTOMERS(
+   ID   INT              NOT NULL,
+   NAME VARCHAR (20)     NOT NULL,
+   AGE  INT              NOT NULL,
+   ADDRESS  CHAR (25) ,
+   SALARY   DECIMAL (18, 2),       
+   PRIMARY KEY (ID)
+);
+INSERT INTO CUSTOMERS (ID,NAME,AGE,ADDRESS,SALARY)
+VALUES (1, 'Ramesh', 32, 'Ahmedabad', 2000.00 );
+
+INSERT INTO CUSTOMERS (ID,NAME,AGE,ADDRESS,SALARY)
+VALUES (2, 'Khilan', 25, 'Delhi', 1500.00 );
+
+INSERT INTO CUSTOMERS (ID,NAME,AGE,ADDRESS,SALARY)
+VALUES (3, 'kaushik', 23, 'Kota', 2000.00 );
+
+INSERT INTO CUSTOMERS (ID,NAME,AGE,ADDRESS,SALARY)
+VALUES (4, 'Chaitali', 25, 'Mumbai', 6500.00 );
+
+INSERT INTO CUSTOMERS (ID,NAME,AGE,ADDRESS,SALARY)
+VALUES (5, 'Hardik', 27, 'Bhopal', 8500.00 );
+
+INSERT INTO CUSTOMERS (ID,NAME,AGE,ADDRESS,SALARY)
+VALUES (6, 'Komal', 22, 'MP', 4500.00 );
+
+INSERT INTO CUSTOMERS VALUES (7, 'Muffy', 24, 'Indore', 10000.00 );
+
+select * from customers;
+
+CREATE or ALTER PROCEDURE SelectCustomerstabledata 
+AS 
+SELECT * FROM Customers
+
+Exec SelectCustomerstabledata;
+
+====================================================================================================================================================================================
+
+DROP PROC SelectCustomerstabledata;
+
+====================================================================================================================================================================================
+
+CREATE or alter PROCEDURE SelectCustomerstabledata 
+(@age AS Int)
+AS 
+Begin
+SELECT * FROM Customers where age>@age
+End
+--Executing:
+Exec SelectCustomerstabledata 25
+
+====================================================================================================================================================================================
+Question:
+
+CREATE or alter PROCEDURE printnum 
+(@n AS Int)
+AS 
+Begin
+
+	DECLARE @x iNt = @n;
+	WHILE @x > 0
+	BEGIN
+		SELECT @x;
+		SET @x = @x-1;
+	end
+End
+--Executing:
+Exec printnum 25
+
+====================================================================================================================================================================================
+
+--Example to pass the table name as procedure parameter: 
+CREATE or alter PROCEDURE SelectCustomerstabledata 
+(@tblName as varchar(26))
+AS 
+Begin
+    declare @sqlStmt nvarchar(MAX) --varchar(MAX)
+    set @sqlStmt = 'SELECT * FROM ' + @tblName 
+    exec sp_executesql @sqlStmt
+    --exec @sqlStmt
+End
+--Executing:
+Exec SelectCustomerstabledata 'Customers'
+
+====================================================================================================================================================================================
+
+Begin
+declare @var nvarchar(max);
+set @var = 'select * from customers';
+exec sp_executesql @var;
+end;
+
+====================================================================================================================================================================================
+
+CREATE or alter PROCEDURE SelectCustomerstabledata 
+(@agemin AS Int, @agemax AS Int)
+AS 
+Begin
+SELECT * FROM Customers where age between @agemin and @agemax
+End
+--Executing the procedure
+Exec SelectCustomerstabledata 25, 27 
+
+EXECUTE SelectCustomerstabledata 
+    @agemax = 27, 
+    @agemin = 25;
+
+====================================================================================================================================================================================
+
+CREATE or alter PROCEDURE SelectCustomerstabledata 
+(@agemin Int, @agemax Int, @rownum int output)
+AS 
+Begin
+    SELECT * FROM Customers where age between @agemin and @agemax;
+     select @rownum= @@ROWCOUNT;
+End
+
+--Executing the procedure
+Begin
+DECLARE @count INT;
+
+EXECUTE SelectCustomerstabledata 
+    @agemax = 25, @agemin = 22,
+    @rownum = @count OUTPUT;
+--EXECUTE SelectCustomerstabledata 
+--    22, 25, @count OUTPUT;
+
+--SELECT @count AS 'Number of Customers found';
+print 'Number of Customers found : ' + cast(@count as varchar);
+End
+
+====================================================================================================================================================================================
+
+CREATE or alter PROCEDURE SelectCustomerstabledata 
+(@agemin AS Int = 18, @agemax AS Int)
+AS 
+Begin
+SELECT * FROM Customers where age between @agemin and @agemax
+End
+
+EXECUTE SelectCustomerstabledata 
+    @agemax = 25;
+
+Exec SelectCustomerstabledata 25, 27 
+
+Exec SelectCustomerstabledata default, 27 
+
+EXECUTE SelectCustomerstabledata 
+    @agemax = 27, 
+    @agemin = 25;
+
+====================================================================================================================================================================================
+Topic: cursor *************************
+
+drop table if exists products;
+
+CREATE TABLE products (
+	product_id INT IDENTITY (1, 1) PRIMARY KEY,
+	product_name VARCHAR (255) NOT NULL,
+	brand_id INT NOT NULL,
+	category_id INT NOT NULL,
+	model_year SMALLINT NOT NULL,
+	list_price DECIMAL (10, 2) NOT NULL);
+
+INSERT INTO products
+VALUES 
+ 	('Test product1', 1, 1, 2018, 599),
+ 	('Test product2', 2, 2, 2016, 699),
+ 	('Test product3', 3, 3, 2018, 799),
+ 	('Test product4', 4, 4, 2015, 899);
+
+select * from products;
 
 
+Begin
+DECLARE 
+    @product_name VARCHAR(MAX), 
+    @list_price   DECIMAL;
 
+DECLARE cursor_product CURSOR
+FOR SELECT 
+        product_name,   list_price
+    FROM   products;
 
+OPEN cursor_product;
 
+FETCH NEXT FROM cursor_product INTO 
+    @product_name,   @list_price;
 
+WHILE @@FETCH_STATUS = 0
+    BEGIN
+        PRINT @product_name + ' has price ' +  CAST(@list_price AS varchar);
+        FETCH NEXT FROM cursor_product INTO 
+            @product_name,  @list_price;
+    END;
+
+CLOSE cursor_product;
+
+DEALLOCATE cursor_product;
+End
+
+====================================================================================================================================================================================
