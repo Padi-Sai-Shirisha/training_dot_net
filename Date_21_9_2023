@@ -624,6 +624,16 @@ Select * from products_duplicate
 
 ====================================================================================================================================================================================
 
+DISABLE TRIGGER trg_products_dup ON products;
+ENABLE TRIGGER trg_products_dup ON products;
 
+DISABLE TRIGGER ALL ON products;
+ENABLE TRIGGER ALL ON products;
+
+
+DISABLE TRIGGER ALL ON testdb;
+ENABLE TRIGGER ALL ON testdb;
+
+exec sp_helptext '[dbo].[trg_products_dup]';
 
 
