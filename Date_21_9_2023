@@ -1,1 +1,55 @@
 Concurrency - presentation - Arkapravo Ganguly
+
+CREATE FUNCTION chkPRime (@number INT) RETURNS VARCHAR(max)
+
+AS BEGIN
+
+DECLARE
+
+@x INT = @number; DECLARE @counter INT = 2;
+
+DECLARE @is_prime INT = 1; DECLARE @type VARCHAR(max) ;
+
+IF @xx2 = 0
+
+BEGIN
+
+SET @type = 'even';
+
+!= 8
+
+END
+
+IF @xx2
+
+BEGIN
+
+SET @type = 'odd';
+
+END ELSE
+
+WHILE (@counter <= @number/2) BEGIN
+
+IF((@number@counter) = 0) BEGIN
+
+SET @type = 'not prime'; SET @is_prime = 0;
+
+BREAK
+
+END
+
+END
+
+IF @is_prime = 1
+
+BEGIN
+
+SET @type = 'prime';
+
+END
+
+END
+
+END
+
+SELECT dbo.chkPRime(list_price) as type_check from bikestores.production.products;
