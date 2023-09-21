@@ -699,14 +699,14 @@ namespace PrjADODC
                 //Console.WriteLine("Number of rows inserted: " + recIns);
 
 
-                /////2. Select : Read R of CRUD
+               /////Select : Read R of CRUD
                 //SqlCommand cmd = new SqlCommand("Select * from t", con);
                 //cmd.CommandType = CommandType.Text;
                 //SqlDataReader rdr = cmd.ExecuteReader();
+                //Console.WriteLine("i\tj");
                 //while (rdr.Read())
                 //{
-                //    Console.Write(rdr.GetInt32(0) + "   ");
-                //    Console.WriteLine(rdr.GetInt32(1));
+                //    Console.WriteLine(rdr.GetInt32(0) + "\t" + rdr.GetInt32(1));
                 //}
 
 
