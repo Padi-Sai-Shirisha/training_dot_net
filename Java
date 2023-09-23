@@ -77,3 +77,1120 @@ public class Hello {
 	}
 
 }
+
+=========================================================================================================================================================
+
+package pkg2;
+class Std{
+	String name;
+	int age;
+	public Std(String name, int age) {
+		this.name = name;
+		setAge(age);
+	}
+	
+	
+	
+	public int getAge() {
+		if(age == 0) {
+			System.out.print("\n Age is 0 as not set through setter\n");
+		}
+		return age;
+	}
+
+
+
+	public void setAge(int age) {
+		if(age > 0 && age <150)
+			this.age = age;
+		else
+			System.out.println("Invalid age entered!(A valid age is 0 -150)");
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Std [name=" + name + ", age=" + getAge() + " years ]";
+	}
+	
+}
+public class PropMain {
+
+	public static void main(String[] args) {
+		
+		Std s1=new Std("Abc", 10);
+		System.out.println(s1);
+	}
+
+	
+
+}
+
+
+
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+
+package pkg2;
+
+class Student{
+	int id;
+	String name;
+	int fee;
+	public Student() { //default Constructor
+		id = 100;
+		name = "Guest";
+		fee = 0;
+	}
+	public Student(int id, String name, int fee) { //Parameterized Constructor
+		this.id = id;
+		this.name = name;
+		this.fee = fee;
+	}
+	@Override
+	public String toString() {
+		return "Student [id=" + id + ", name=" + name + ", fee=" + fee + "]";
+	}
+	
+	
+	
+}
+
+public class ConstMain {
+
+	public static void main(String[] args) {
+		Student[] stds = new Student[5];
+		stds[0] = new Student(101,"Aishwariya",10000);
+		stds[1] = new Student(102,"Sharukh Khan",100000);
+		stds[2] = new Student();
+		stds[3] = new Student(104,"Charlie Chaplin",90000);
+		stds[4] = new Student(105,"All of You",0);
+		for(Student s : stds) {
+			System.out.println(s);
+		}
+
+	}
+
+}
+
+
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+package pkg2;
+class Printer{
+	//Polymorphism : Overloading : Compile time polymorphism as the function is loaded at compile time
+	//3 cases of Overloading:
+	//a. Overload case with no of param is diff
+	//b. overload case as datatype of param is diff
+	//c. overload as series of parameter is diff
+	
+	void print() { //1
+		System.out.println("No Parameter Printing is done!");
+	}
+	void print(String s) { //2: Overload case with 1 as no of param is diff
+		System.out.println("String Parameter " + s + " Printing is done!");
+	}
+	void print(int s) { 
+		//3: Overload case with 1 as no of param is diff, and
+		// overload case with 2 as datatype of param is diff
+		System.out.println("Int Parameter " + s + " Printing is done!");
+	}
+	void print(int i, String s) { 
+		//4: Overload case with 1,2,3  as no of param is diff
+		System.out.println("Int Parameter " + i + " and " + "String Parameter " + s +" Printing is done!");
+	}
+	void print(String s, int i) { 
+		//5: Overload case with 1,2,3  as no of param is diff
+		//  overload with case 4 as series of parameter is diff
+		System.out.println("String Parameter " + s + " and " + "Int Parameter " + i +" Printing is done!");
+	}
+}
+
+//Polymorphism with Override:
+//It is a runtime polymorphism, as we know about which fn is called only at run time
+//The function signature should be the same in both cases
+//The classes are different and have parent  to child relationship 
+class PaClass{
+	public void fn() {
+		System.out.println("This is a fn in parent class");
+	}
+}
+
+class ChildClass extends PaClass{
+	@Override 
+	public void fn() {
+		System.out.println("This is a fn in Child class");
+	}
+}
+
+public class PolymorphismMain {
+
+	public static void main(String[] args) {
+		Printer p1=new Printer();
+		p1.print();
+		p1.print("Hello");
+		p1.print(100);
+		p1.print(102, "Hello102");
+		p1.print("Hello103", 103);
+		
+		PaClass p=new PaClass();
+		p.fn(); // parent fn
+		PaClass p2=new ChildClass();
+		p2.fn(); //Child fn
+
+	}
+
+}
+
+
+
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+
+
+
+Interface:
+100% abstraction : Methods won’t have any body
+Implementation of an interface makes the class compulsorily implement all methods of interface
+Multiple interface can be implemented by a single class (Multiple inheritance)
+Only Interfaces are responsible for frameworks, libraries, project model, blueprints of classes, abstraction model, SOLID design principles, Dependency Injection
+
+
+
+=======================================================================================================================================
+
+
+package pkg2;
+
+public interface Emp {
+	int reembursement(); //by default all methods of interfaces are public and abstract
+	void input(int id, String name, int sal);
+}
+
+
+=======================================================================================================================================
+
+
+package pkg2;
+
+public abstract class Empl implements Emp{
+
+	int id;
+	String name;
+	int sal;
+	
+	
+	@Override
+	public int reembursement() {
+		// TODO Auto-generated method stub
+		return sal;
+	}
+
+	@Override
+	public String toString() {
+		return "Emp [id=" + id + ", name=" + name + ", sal=" + sal + "]";
+	}
+
+	@Override
+	public void input(int id, String name, int sal) {
+		this.id=id;
+		this.name=name;
+		this.sal=sal;
+		
+	}
+}
+
+
+=======================================================================================================================================
+
+
+
+package pkg2;
+
+public class SalEmp extends Empl {
+	public int getSal() {
+		return sal/12;
+	}
+
+	@Override
+	public String toString() {
+		return "SalEmp: " + super.toString();
+	}
+	
+
+}
+
+
+=======================================================================================================================================
+
+
+
+
+package pkg2;
+
+public class WagesEmp extends Empl {
+	public int getWages() {
+		return sal/30;
+	}
+
+	@Override
+	public String toString() {
+		return "WagesEmp: " + super.toString();
+	}
+	
+
+}
+
+
+
+=======================================================================================================================================
+
+
+
+package pkg2;
+
+public class EmpMain {
+	static void hire(Emp e) {
+		e.input(100, "Visitor", 12000);
+		int sal = e.reembursement();
+		System.out.println("sal is:" + sal);
+		if(e instanceof SalEmp)
+		{
+			SalEmp ee=(SalEmp)e;
+			int s = ee.getSal();
+			System.out.println("sal for a month is:" + s);
+		}
+		if(e instanceof WagesEmp)
+		{
+			WagesEmp ee=(WagesEmp)e;
+			int s = ee.getWages();
+			System.out.println("wages for 1 day is:" + s);
+		}
+		System.out.println(e);
+		
+	}
+
+	public static void main(String[] args) {
+		hire(new SalEmp());
+		hire(new SalEmp());
+		hire(new WagesEmp());
+	}
+}
+
+
+
+
+
+
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+Abstract Class:
+
+An abstract class requires abstract keyword before class keyword
+An abstract class cannot be initialized with new keyword
+An abstract class can have references created which initialize according to child classes
+An abstract class can have abstract functions
+An abstract function cannot have a body
+An abstract function have to be compulsorily implemented by child classes
+The implementation is not compulsory if the child class is also abstract
+An Abstract class have 0 – 100 % abstraction (it can have no method to be abstract or all methods abstract)
+An Abstract class is used purely for Inheritance.
+
+
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+
+
+
+package pkg2;
+abstract class GUIOS{
+	public void common() {
+		System.out.print("\nMouse, files, Desktop, ");
+	}
+	public abstract void dir() ;
+	
+}
+class WinOS extends GUIOS{
+	public void dir() {
+		System.out.print("Folder, ");
+	}
+	public void cmd() {
+		System.out.println("Cmd line \n");
+	}
+}
+class LinuxOS extends GUIOS{
+	public void dir() {
+		System.out.print("Dirs, ");
+	}
+	public void terminal() {
+		System.out.println("Terminal \n");
+	}
+}
+class MacOS extends GUIOS{
+	public void dir() {
+		System.out.print("Dirs, ");
+	}
+	public void terminal() {
+		System.out.println("Terminal \n");
+	}
+}
+
+public class OSMain {
+
+	public static void main(String[] args) {
+		GUIOS os1 = new WinOS();
+		os1.common();
+		os1.dir();
+		if(os1 instanceof WinOS) {
+			WinOS os= (WinOS)os1;
+			os.cmd();
+		}
+		if(os1 instanceof LinuxOS) {
+			LinuxOS os= (LinuxOS)os1;
+			os.terminal();
+		}
+		if(os1 instanceof MacOS) {
+			MacOS os= (MacOS)os1;
+			os.terminal();
+		}
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+
+
+Specialization and Generalization:
+
+
+=======================================================================================================================================
+
+package pkg2;
+
+public class MainInheritance1 {
+	public static void Trainer(Dinosur d) {
+		d.breathe();
+		d.eat();
+		if(d instanceof DinosurFly) {
+			DinosurFly df = (DinosurFly)d;
+			df.fly();
+		}
+		if(d instanceof DinosurCrawl) {
+			DinosurCrawl dc = (DinosurCrawl)d;
+			dc.crawl();
+		}
+		if(d instanceof DinosurSwim) {
+			DinosurSwim ds = (DinosurSwim)d;
+			ds.swim();
+		}
+		if(d instanceof DinosurWalk) {
+			DinosurWalk ds = (DinosurWalk)d;
+			ds.walk();
+		}
+	}
+
+	public static void main(String[] args) {
+		System.out.println("A flying dinosur Training: ");
+		Trainer(new DinosurFly());
+		System.out.println("A crawling dinosur Training: ");
+		Trainer(new DinosurCrawl());
+		System.out.println("A normal dinosur Training: ");
+		Trainer(new Dinosur());	
+		System.out.println("A Walking dinosur Training: ");
+		Trainer(new DinosurWalk());
+		
+		
+//		Dinosur d1 = new DinosurFly(); //DinosurFly is generalized into Dinosur. Upcasting
+//		d1.breathe();
+//		d1.eat();
+////		System.out.println(d1 instanceof Dinosur); //d1 is a Dinosur //true
+////		System.out.println(d1 instanceof DinosurFly); //d1 is a DinosurFly //true
+////		System.out.println(d1 instanceof DinosurCrawl); //d1 is not a DinosurCrawl //false
+////		System.out.println(d1 instanceof DinosurSwim); //d1 is not a DinosurSwim //false
+//		if(d1 instanceof DinosurFly) {
+//			DinosurFly df1 = (DinosurFly) d1; //downcasting // specialized casting
+//			df1.fly(); //specialization
+//		}
+//		if(d1 instanceof DinosurCrawl) {
+//			DinosurCrawl dc1 = (DinosurCrawl) d1; //downcasting // specialized casting
+//			dc1.crawl(); //specialization
+//		}
+//		
+		
+		
+		
+	}
+
+}
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+package pkg2;
+
+public class DinosurWalk extends Dinosur{
+	
+	public DinosurWalk() {
+		System.out.println("Walking DinosurChild is created");
+	}
+	public void walk() {
+		System.out.println("A Child4 Dinosur can walk");
+	}
+}
+
+
+
+
+
+=======================================================================================================================================
+
+
+
+package pkg2;
+
+public class DinosurSwim extends Dinosur{
+	
+	public DinosurSwim() {
+		System.out.println("Flying DinosurChild is created");
+	}
+	public void swim() {
+		System.out.println("A Child3 Dinosur can swim");
+	}
+}
+
+
+
+=======================================================================================================================================
+
+
+
+
+package pkg2;
+
+public class DinosurCrawl extends Dinosur{
+	
+	public DinosurCrawl() {
+		System.out.println("Crawling DinosurChild is created");
+	}
+	public void crawl() {
+		System.out.println("A Child2 Dinosur can crawl");
+	}
+	public void eat() {
+		System.out.println("A Dinosur eats any thing (veg, non-veg)");
+	}
+}
+
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+package pkg2;
+
+public class DinosurFly extends Dinosur{
+	
+	public DinosurFly() {
+		System.out.println("Flying DinosurChild is created");
+	}
+	public void fly() {
+		System.out.println("A Child1 Dinosur can fly");
+	}
+}
+
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+package pkg2;
+
+public class Dinosur {
+	public Dinosur() {
+		System.out.println("DinosurPa is created");
+	}
+	public void breathe() {
+		System.out.println("A Dinosur can breathe in Oxygen");
+	}
+	public void eat() {
+		System.out.println("A Dinosur eats vegetables");
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+
+
+
+
+
+
+package pkg2;
+
+public class MainInheritance1 {
+
+	public static void main(String[] args) {
+		Child c1=new Child();
+		c1=null;
+		System.gc();
+	}
+
+}
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+package pkg2;
+
+public class Child extends Pa{
+	public Child() {
+		System.out.println("Child is created");
+	}
+	public void finalize() {
+		System.out.println("Child is GC");
+	}
+}
+
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+
+package pkg2;
+
+public class Pa {
+	public Pa() {
+		System.out.println("Pa is created");
+	}
+	public void finalize() {
+		System.out.println("Pa is GC");
+	}
+
+}
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+
+
+
+package pkg2;
+
+public class MainEmployee {
+	public static void sum(int a, int b) {
+		int c = a+b;
+		System.out.println(c);
+	}
+	public static int mul (int a, int b) {
+		return a * b;
+	}
+
+	public static void main(String[] args) {
+		int x=10; //local variable : needs initialization before usage
+		System.out.println(x);
+		Employee.compName="Google";
+		//Employee.id =100;
+		Employee e1 = new Employee();
+		e1.id = 101;
+		e1.compName = "Gmail";
+		e1.input(101, "John", 10);
+		e1.print();
+		Employee e2 = new Employee();
+		e2.input(102, "Doe", 11);
+		e2.print();
+		Employee e3 = new Employee();
+		e3.print();
+		System.out.println("\n\nE3 printed out:");
+		System.out.println(e3);
+		
+		sum(5,6);
+		int res = mul(7,8);
+		System.out.println(res);
+	}
+
+}
+
+
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+
+
+
+
+
+package pkg2;
+
+public class Employee {
+    public int id; //instance Variable defaults to 0 as int
+    private String name;//instance Variable defaults to null as an Object
+    private int sal;
+    public static String compName; //Class variable
+    public Employee() {
+    	id=100;
+    	name="Guest";
+    	sal=0;
+    }
+    
+    public void appraisal(int newSal){
+    	this.sal = newSal;
+    }
+    public void input(int id, String name, int sal) { //parameter variables, get the values from function call
+    	this.id = id;
+    	this.name = name;
+    	this.sal = sal;
+    }
+    public void print() {
+    	System.out.println("The Employee details : id : " + id + " name : "  + name + " sal : " + sal +
+    			"    Works in : " + compName);
+    }
+    public String toString() {
+    	return "Emp : id : " + id + " name : "  + name + " sal : " + sal + " Works in : " + compName;
+    }
+
+}
+
+
+
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+
+
+
+package pkg1;
+import java.util.Scanner; //already present in JDK
+
+public class Menu1 {
+
+	public static void main(String[] args) {
+		
+		Scanner sc = new Scanner(System.in);
+		int ch;
+		String name= "";
+		while(true) {
+			System.out.println("Menu:\n1.Enter name.\n2.Display Name\n3.Exit\nEnter Choice:");
+			ch = sc.nextInt();
+			sc.nextLine();
+			if(ch==1) {
+				System.out.println("What is your name ? ");
+				name = sc.nextLine();
+			}
+			else if(ch==2) {
+				System.out.println("The name is : " + name);
+			}
+			else if(ch ==3) {
+				break;
+			}
+			else {
+				System.out.println("Incorrect choice entered!!(ch can be 1-3 only)");
+			}
+			
+		}
+	}
+
+}
+
+
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+
+
+
+package pkg1;
+import java.util.Scanner; //already present in JDK
+
+public class Menu1 {
+
+	public static void main(String[] args) {
+		
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter a number: ");
+		int x = sc.nextInt();
+		sc.nextLine();
+		System.out.println("The value enterd is : " + x);
+		System.out.println("Enter your name: ");
+		String n = sc.nextLine();
+		System.out.println("Welcome " + n + " to the world of Java!!");
+	}
+
+}
+
+
+
+
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+
+
+package pkg1;
+
+public class MainEmployee {
+	public static void sum(int a, int b) {
+		int c = a+b;
+		System.out.println(c);
+	}
+	public static int mul (int a, int b) {
+		return a * b;
+	}
+
+	public static void main(String[] args) {
+		int x=10; //local variable : needs initialization before usage
+		System.out.println(x);
+		Employee.compName="Google";
+		//Employee.id =100;
+		Employee e1 = new Employee();
+		e1.id = 101;
+		e1.compName = "Gmail";
+		e1.input(101, "John", 10);
+		e1.print();
+		Employee e2 = new Employee();
+		e2.input(102, "Doe", 11);
+		e2.print();
+		Employee e3 = new Employee();
+		e3.print();
+		
+		sum(5,6);
+		int res = mul(7,8);
+		System.out.println(res);
+	}
+
+}
+
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+
+
+package pkg1;
+
+public class Employee {
+    public int id; //instance Variable defaults to 0 as int
+    private String name;//instance Variable defaults to null as an Object
+    private int sal;
+    public static String compName; //Class variable
+    public void appraisal(int newSal){
+    	this.sal = newSal;
+    }
+    public void input(int id, String name, int sal) { //parameter variables, get the values from function call
+    	this.id = id;
+    	this.name = name;
+    	this.sal = sal;
+    }
+    public void print() {
+    	System.out.println("The Employee details : id : " + id + " name : "  + name + " sal : " + sal +
+    			"    Works in : " + compName);
+    }
+
+}
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+
+package pkg1;
+
+public class Hello {
+
+	 public static  void main(String[] args) {
+		int[] marks = new int[5];
+		marks[0] = 10;
+		marks[1] = 20;
+		marks[2] = 80;
+		marks[3] = 90;
+		marks[4] = 56; 
+		
+		System.out.println(marks[0]);//10
+		System.out.println("Array by for .. in loop: ");
+		for(int ele : marks ) {
+			System.out.println(ele);
+		}
+		System.out.println("Array by for loop: ");
+		for(int i = 0 ; i < marks.length ; i++) {
+			System.out.println(marks[i]);
+		}
+		 
+	}
+
+	
+}
+
+
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+
+
+package pkg1;
+
+public class Hello {
+
+	 public static  void main(String[] args) {
+		int[] marks = {10, 20, 80, 90, 56 }; 
+		System.out.println(marks[0]);//10
+		System.out.println("Array by for .. in loop: ");
+		for(int ele : marks ) {
+			System.out.println(ele);
+		}
+		System.out.println("Array by for loop: ");
+		for(int i = 0 ; i < marks.length ; i++) {
+			System.out.println(marks[i]);
+		}
+		 
+	}
+
+	
+}
+
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+
+package pkg1;
+
+public class Hello {
+
+	 public static  void main(String[] args) {
+		System.out.println("For Loop");
+		for(int i=0;i<10;i++) {
+			if(i==4)
+				continue;
+			if(i==7)
+				break;			
+			System.out.println("i = " + i );
+		}
+		int j=0;
+		System.out.println("While Loop: ");
+		while(j<10) {
+			System.out.println("j = " + j );
+			j++;
+		}
+		int i=0;
+		System.out.println("do .. While Loop: ");
+		 do {
+			System.out.println("i = " + i );
+			i++;
+		}while(i<10);
+		 
+		 
+	}
+
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+=======================================================================================================================================
+
+
+
+
+
+
+package pkg1;
+
+public class Hello {
+
+	 public static  void main(String[] args) {
+		var grade = 'A';
+		switch(grade) {
+		case 'A':
+			System.out.println("Excellent");
+			break;
+		case 'B':
+			System.out.println("Pass");
+			break;
+		case 'C':
+			System.out.println("Fail");
+			break;
+		default:
+			System.out.println("Invalid grade");
+			break;
+				
+		}
+	}
+
+	
+}
+
+
+
+
+
+=======================================================================================================================================
+
+package pkg1;
+
+public class Hello {
+
+	 public static  void main(String[] args) {
+		var marks = 90;
+		if(marks < 50 ) {
+			System.out.println("Fail");
+		}
+		else if(marks < 75){
+			System.out.println("Pass");
+		}
+		else if(marks <100){
+			System.out.println("Excellent");
+		}
+		else {
+			System.out.println("Invalid marks");
+		}
+
+	}
+
+	
+}
