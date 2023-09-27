@@ -144,3 +144,76 @@ namespace Day30MVC.Models
 
 Index.cshtml
 ------------------------------------------------------
+
+@* <h1>
+	<a href="/Employee/ListEmp">Welcome to list of Emp Page</a>
+	<br />
+	<a href="/Employee/ListEmp2">List of Emp as JSON</a>
+	<Br /><hr />
+
+	<form action="/Employee/WelcomeEmp2">
+		Name: <input type="text" name="name" />
+		<input type="submit" value="WelcomeEmp2" />
+	</form>
+	<br />
+	<hr />
+
+	<form action="/Employee/WelcomeEmp">
+		<!-- Name: Monica is a hidden field here.
+		<input type="hidden" name="name1" value="Monica"/> -->
+		Name: <input type="text" name="name" />
+		<input type="submit" value="WelcomeEmp" />
+	</form>
+</h1> *@
+
+<h1>
+	<a href="/Employee/AddEmpD">Add employee</a>
+	<br />
+	<a href="/Employee/UpdateD">Update employee</a>
+	<br/>
+	<a href="/Employee/ListEmp2">List of Emp as JSON</a>
+	<Br />
+</h1>
+
+
+
+UpdateD.cshtml
+------------------------------------------------------
+
+
+<h1>
+	<form action="/Employee/Update" method="post">
+		Name: <input type="text" name="name" />
+		<br />
+		ID: <input type="text" name="id" />
+		<br />
+		<input type="submit" value="Submit" />
+	</form>
+</h1>
+
+
+ListEmp.cshtml
+------------------------------------------------------
+
+
+@model IEnumerable<Day30MVC.Models.Employee>
+
+@foreach (var emp in Model)
+{
+    <div>
+        @emp
+        <hr />
+    </div>
+}
+
+
+
+
+WelcomeEmp.cshtml
+------------------------------------------------------
+
+
+<h1>
+    Welcome @TempData["Emp"] !!
+</h1>
+
