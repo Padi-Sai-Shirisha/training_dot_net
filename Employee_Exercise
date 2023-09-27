@@ -23,4 +23,124 @@ namespace Day30MVC.Models
 }
 
 
+EmployeeController.cs
+------------------------------------------------------
 
+using Day30MVC.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Day30MVC.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        static EmployeeList emps = new EmployeeList();
+        public IActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult WelcomeEmp(string name)
+        {
+            TempData["Emp"] = emps.getEmp(name);
+            return View();
+        }
+        public IActionResult WelcomeEmp2(string name)
+        {
+            TempData["EmpName"] = name;
+            return View();
+        }
+        public IActionResult ListEmp()
+        {
+            return View(emps.emps);
+        }
+
+        public JsonResult ListEmp2()
+        {
+            return Json(emps.emps);
+        }
+
+        public IActionResult AddEmpD()
+        {
+            return View();
+        }
+        public IActionResult Add(string name, int id)
+        {
+            Employee e = new Employee(name, id);
+            emps.AddEmp(e);
+            return RedirectToAction("ListEmp2");
+        }
+
+        public IActionResult UpdateD()
+        {
+            return View();
+        }
+
+        public IActionResult Update(string name, int id) 
+        {
+            foreach (Employee ee in emps.emps)
+            {
+                if (ee.id.Equals(id))
+                {
+                    ee.name = name;
+                }
+            }
+            return RedirectToAction("ListEmp2");
+        }
+
+    }
+}
+
+
+
+
+
+EmployeeList.cs
+------------------------------------------------------
+
+using System.Collections.Generic;
+using System;
+
+namespace Day30MVC.Models
+{
+    public class EmployeeList
+    {
+        public List<Employee> emps = new List<Employee>();
+        public EmployeeList(List<Employee> emps) { this.emps = emps; }
+        public EmployeeList(Employee emp) { this.emps.Add(emp); }
+        public EmployeeList()
+        {
+            this.AddEmp(new Employee("abc", 101));
+            this.AddEmp(new Employee("xyz", 102));
+            this.AddEmp(new Employee("abcxyz", 103));
+        }
+        public void AddEmp(Employee emp) { this.emps.Add(emp); }
+
+       
+
+        public void DispEmp()
+        {
+            foreach (Employee e in emps)
+            {
+                Console.WriteLine(e);
+            }
+        }
+        public Employee getEmp(string name)
+        {
+            Employee e = new Employee("default", 100);
+            foreach (Employee ee in emps)
+            {
+                if (ee.name.Equals(name))
+                {
+                    e = ee;
+                }
+            }
+
+            Employee e2 = emps.Find(ee => ee.name.Equals(name));
+            return e;
+        }
+    }
+}
+
+
+
+Index.cshtml
+------------------------------------------------------
